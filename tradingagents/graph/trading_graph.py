@@ -38,6 +38,7 @@ from .setup import GraphSetup
 from .propagation import Propagator
 from .reflection import Reflector
 from .signal_processing import SignalProcessor
+from tradingagents.execution.signal_parser import SignalParser
 
 
 class TradingAgentsGraph:
@@ -122,6 +123,7 @@ class TradingAgentsGraph:
         self.propagator = Propagator()
         self.reflector = Reflector(self.quick_thinking_llm)
         self.signal_processor = SignalProcessor(self.quick_thinking_llm)
+        self.signal_parser = SignalParser()
 
         # State tracking
         self.curr_state = None
@@ -285,3 +287,19 @@ class TradingAgentsGraph:
     def process_signal(self, full_signal):
         """Process a signal to extract the core decision."""
         return self.signal_processor.process_signal(full_signal)
+
+    def extract_trade_intent(
+        self,
+        symbol: str,
+        full_signal: str,
+        *,
+        time_horizon: Optional[str] = None,
+        max_notional_usd: Optional[float] = None,
+    ):
+        """Parse the final decision into a structured trade intent."""
+        return self.signal_parser.parse(
+            symbol=symbol,
+            raw_decision=full_signal,
+            time_horizon=time_horizon,
+            max_notional_usd=max_notional_usd,
+        )

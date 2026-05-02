@@ -1,0 +1,91 @@
+[
+  {
+    "name": "nvda_buy_replay",
+    "symbol": "NVDA",
+    "trade_date": "2026-04-20",
+    "final_trade_decision": "**Rating**: Buy\n\n**Executive Summary**: Initiate a measured long position in NVDA over the next one to three sessions. Favor incremental entry rather than chasing an extended open. Keep position sizing disciplined near 10% of portfolio value and revisit if earnings guidance or broader AI demand weakens.\n\n**Investment Thesis**: The analyst stack is aligned on strong demand for accelerator products, improving sentiment, and constructive technical structure. Risk remains elevated around valuation, but the debate still supports adding exposure rather than waiting for a perfect pullback.",
+    "expected_rating": "BUY",
+    "expected_action": "buy",
+    "risk_policy": {
+      "allowed_symbols": ["NVDA", "SPY", "QQQ"],
+      "max_notional_per_trade_usd": 100.0,
+      "max_portfolio_allocation_pct": 0.2,
+      "max_total_exposure_pct": 0.5,
+      "min_confidence": 0.55
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [
+      {
+        "symbol": "SPY",
+        "qty": 1.0,
+        "market_value": 100.0,
+        "side": "long"
+      }
+    ],
+    "expected_approved": true,
+    "expected_order_side": "buy"
+  },
+  {
+    "name": "qqq_hold_replay",
+    "symbol": "QQQ",
+    "trade_date": "2026-04-20",
+    "final_trade_decision": "**Rating**: Hold\n\n**Executive Summary**: Maintain the current position and avoid initiating new exposure until the next macro print resolves directional uncertainty.\n\n**Investment Thesis**: The debate is balanced. Technicals remain constructive, but news and valuation inputs do not justify fresh risk-taking. The right action is patience.",
+    "expected_rating": "HOLD",
+    "expected_action": "hold",
+    "risk_policy": {
+      "allowed_symbols": ["NVDA", "QQQ"],
+      "max_notional_per_trade_usd": 100.0,
+      "max_portfolio_allocation_pct": 0.2,
+      "max_total_exposure_pct": 0.5,
+      "min_confidence": 0.55
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [
+      {
+        "symbol": "QQQ",
+        "qty": 2.0,
+        "market_value": 300.0,
+        "side": "long"
+      }
+    ],
+    "expected_approved": false,
+    "expected_reason_substring": "Hold signal"
+  },
+  {
+    "name": "tsla_rejected_by_allowlist_replay",
+    "symbol": "TSLA",
+    "trade_date": "2026-04-20",
+    "final_trade_decision": "**Rating**: Overweight\n\n**Executive Summary**: Increase exposure gradually if momentum persists, but avoid oversized entries.\n\n**Investment Thesis**: Sentiment and momentum improved materially this week, though the name remains volatile and politically noisy. The debate still lands on adding exposure.",
+    "expected_rating": "OVERWEIGHT",
+    "expected_action": "buy",
+    "risk_policy": {
+      "allowed_symbols": ["NVDA", "SPY"],
+      "max_notional_per_trade_usd": 100.0,
+      "max_portfolio_allocation_pct": 0.2,
+      "max_total_exposure_pct": 0.5,
+      "min_confidence": 0.55
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [],
+    "expected_approved": false,
+    "expected_reason_substring": "allowlist"
+  }
+]

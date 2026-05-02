@@ -1,0 +1,83 @@
+[
+  {
+    "name": "approved_buy_within_limits",
+    "intent": {
+      "symbol": "NVDA",
+      "action": "buy",
+      "rating": "BUY",
+      "confidence": 0.8,
+      "thesis": "Positive setup",
+      "thesis_excerpt": "Positive setup",
+      "max_notional_usd": 100.0
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [],
+    "config": {
+      "allowed_symbols": ["NVDA", "SPY"],
+      "min_confidence": 0.55,
+      "max_notional_per_trade_usd": 100.0,
+      "max_portfolio_allocation_pct": 0.2,
+      "max_total_exposure_pct": 0.5
+    },
+    "expected_approved": true,
+    "expected_action": "buy"
+  },
+  {
+    "name": "reject_symbol_not_in_allowlist",
+    "intent": {
+      "symbol": "TSLA",
+      "action": "buy",
+      "rating": "BUY",
+      "confidence": 0.9,
+      "thesis": "Positive setup",
+      "thesis_excerpt": "Positive setup",
+      "max_notional_usd": 50.0
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [],
+    "config": {
+      "allowed_symbols": ["NVDA", "SPY"]
+    },
+    "expected_approved": false,
+    "expected_action": "buy",
+    "expected_reason_substring": "allowlist"
+  },
+  {
+    "name": "hold_signal_fails_closed",
+    "intent": {
+      "symbol": "SPY",
+      "action": "hold",
+      "rating": "HOLD",
+      "confidence": 0.7,
+      "thesis": "Neutral setup",
+      "thesis_excerpt": "Neutral setup",
+      "max_notional_usd": null
+    },
+    "account": {
+      "equity": 1000.0,
+      "cash": 500.0,
+      "buying_power": 500.0,
+      "portfolio_value": 1000.0,
+      "pattern_day_trader": false
+    },
+    "positions": [],
+    "config": {
+      "allowed_symbols": ["SPY"]
+    },
+    "expected_approved": false,
+    "expected_action": "hold",
+    "expected_reason_substring": "Hold signal"
+  }
+]

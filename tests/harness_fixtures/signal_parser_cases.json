@@ -1,0 +1,26 @@
+[
+  {
+    "name": "buy_rating_with_confidence_percentage",
+    "symbol": "NVDA",
+    "raw_decision": "**Rating**: Buy\n\nConfidence: 72%\n\nExecutive Summary: Add on pullbacks and keep risk tight.",
+    "expected_rating": "BUY",
+    "expected_action": "buy",
+    "expected_confidence": 0.72
+  },
+  {
+    "name": "underweight_maps_to_sell",
+    "symbol": "TSLA",
+    "raw_decision": "Rating: Underweight\n\nExecutive Summary: Trim exposure and reduce risk concentration.",
+    "expected_rating": "UNDERWEIGHT",
+    "expected_action": "sell",
+    "expected_confidence": null
+  },
+  {
+    "name": "final_transaction_proposal_fallback",
+    "symbol": "SPY",
+    "raw_decision": "The setup is neutral and event risk is elevated.\n\nFINAL TRANSACTION PROPOSAL: **HOLD**",
+    "expected_rating": "HOLD",
+    "expected_action": "hold",
+    "expected_confidence": null
+  }
+]
