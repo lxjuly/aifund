@@ -26,6 +26,15 @@ Create the first public AI Fund website under `apps/web`, optimized for Cloudfla
 - Build output directory: `dist`
 - Production branch: `main`
 
+## Cloudflare Workers Static Assets Settings
+
+If the connected Cloudflare project is using a deploy command such as `npx wrangler deploy`, set:
+
+- Root directory: `apps/web`
+- Deploy command: `npm run deploy`
+
+The `deploy` script runs `npm run build` before `wrangler deploy`, and `wrangler.toml` points static assets at `./dist`.
+
 ## Guardrails
 
 - Position AI Fund as a research and paper-trading system.
