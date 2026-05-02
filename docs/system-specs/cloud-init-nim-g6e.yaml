@@ -1,0 +1,95 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+  - jq
+  - unzip
+
+write_files:
+  - path: /usr/local/bin/start-nim.sh
+    permissions: "0755"
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      NGC_API_KEY="${NGC_API_KEY:-}"
+      NIM_IMAGE="${NIM_IMAGE:-nvcr.io/nim/MODEL_IMAGE_HERE:latest}"
+      NIM_PORT="${NIM_PORT:-8000}"
+      NIM_CACHE_DIR="${NIM_CACHE_DIR:-/opt/nim-cache}"
+      CONTAINER_NAME="${CONTAINER_NAME:-nim-llm}"
+
+      if [[ -z "${NGC_API_KEY}" ]]; then
+        echo "NGC_API_KEY is not set" >&2
+        exit 1
+      fi
+
+      mkdir -p "${NIM_CACHE_DIR}"
+
+      echo "${NGC_API_KEY}" | docker login nvcr.io --username '$oauthtoken' --password-stdin
+      docker pull "${NIM_IMAGE}"
+
+      docker rm -f "${CONTAINER_NAME}" >/dev/null 2>&1 || true
+
+      docker run -d \
+        --name "${CONTAINER_NAME}" \
+        --restart unless-stopped \
+        --gpus all \
+        --shm-size=16g \
+        -p "${NIM_PORT}:8000" \
+        -v "${NIM_CACHE_DIR}:/opt/nim/.cache" \
+        -e NGC_API_KEY="${NGC_API_KEY}" \
+        "${NIM_IMAGE}"
+
+  - path: /etc/systemd/system/nim.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=NVIDIA NIM Service
+      After=docker.service network-online.target
+      Wants=network-online.target
+      Requires=docker.service
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      EnvironmentFile=-/etc/nim.env
+      ExecStart=/usr/local/bin/start-nim.sh
+      ExecStop=/usr/bin/docker rm -f nim-llm
+      TimeoutStartSec=0
+
+      [Install]
+      WantedBy=multi-user.target
+
+  - path: /etc/nim.env
+    permissions: "0600"
+    content: |
+      NGC_API_KEY=REPLACE_ME
+      NIM_IMAGE=nvcr.io/nim/MODEL_IMAGE_HERE:latest
+      NIM_PORT=8000
+      NIM_CACHE_DIR=/opt/nim-cache
+      CONTAINER_NAME=nim-llm
+
+runcmd:
+  - mkdir -p /etc/apt/keyrings
+  - bash -lc 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
+  - bash -lc 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list'
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin ubuntu-drivers-common
+  - ubuntu-drivers install
+  - curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+  - bash -lc 'curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed "s#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g" > /etc/apt/sources.list.d/nvidia-container-toolkit.list'
+  - apt-get update
+  - apt-get install -y nvidia-container-toolkit
+  - nvidia-ctk runtime configure --runtime=docker
+  - systemctl enable docker
+  - systemctl restart docker
+  - systemctl daemon-reload
+  - systemctl enable nim.service
+  - systemctl start nim.service
+
+final_message: "cloud-init finished. Check /var/log/cloud-init-output.log and systemctl status nim.service"

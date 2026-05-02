@@ -107,6 +107,32 @@ git clone https://github.com/TauricResearch/TradingAgents.git
 cd TradingAgents
 ```
 
+### Installation With uv
+
+If you use `uv`, this is the easiest local setup path:
+
+```bash
+uv sync
+```
+
+Then run commands with `uv run`:
+
+```bash
+uv run python -m cli.main analyze
+uv run python -m cli.main exec paper NVDA 2026-04-24
+uv run python scripts/run_harnesses.py
+```
+
+For the local execution workflow, start from:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Then fill in your model endpoint and model names before running the non-interactive execution commands.
+
+For the recommended remote-model path, see `docs/task-specs/thunder-ollama-workflow.md`.
+
 Create a virtual environment in any of your favorite environment managers:
 ```bash
 conda create -n tradingagents python=3.13
@@ -162,6 +188,7 @@ Launch the interactive CLI:
 ```bash
 tradingagents          # installed command
 python -m cli.main     # alternative: run directly from source
+uv run python -m cli.main  # if using uv
 ```
 You will see a screen where you can select your desired tickers, analysis date, LLM provider, research depth, and more.
 
@@ -178,6 +205,36 @@ An interface will appear showing results as they load, letting you track the age
 <p align="center">
   <img src="assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
 </p>
+
+### Local Execution Workflow
+
+For a non-interactive dry-run execution path:
+
+```bash
+uv run python -m cli.main exec paper NVDA 2026-04-24
+```
+
+Recommended backend:
+
+- Thunder Compute instance
+- `ollama` template
+- local port-forwarded Ollama endpoint at `http://localhost:11434`
+
+See `docs/task-specs/thunder-ollama-workflow.md`.
+
+To inspect a saved TradingAgents log and prepare it for replay capture:
+
+```bash
+uv run python -m cli.main exec from-log /path/to/full_states_log_2026-04-24.json
+```
+
+To run the local harness suite:
+
+```bash
+uv run python scripts/run_harnesses.py
+```
+
+See `docs/task-specs/local-verification-workflow.md` for the local verification path.
 
 ## TradingAgents Package
 
