@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SystemVisual from "../components/SystemVisual.astro";
+---
+
+<BaseLayout
+  title="Methodology | AI Fund"
+  description="How AI Fund structures agentic trading research, replay harnesses, risk policy, and simulated execution."
+>
+  <section class="page-hero compact">
+    <p class="eyebrow">Methodology</p>
+    <h1>How decisions move from research to guarded intent.</h1>
+    <p>
+      The system separates model reasoning from execution authority. Agents can recommend;
+      policy decides whether anything is even eligible for a broker call.
+    </p>
+  </section>
+
+  <SystemVisual />
+
+  <section class="content-band">
+    <div class="two-column">
+      <div>
+        <p class="eyebrow">Agent workflow</p>
+        <h2>Multi-perspective analysis</h2>
+      </div>
+      <div class="text-stack">
+        <p>Analysts inspect market, sentiment, news, and fundamentals data. Bull and bear researchers debate the interpretation. A trader forms a proposal, and risk reviewers challenge the position before portfolio management emits the final decision.</p>
+        <p>The current local runtime uses Thunder Compute with Ollama so model experiments stay low-cost and reversible.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-band alt">
+    <div class="principle-grid">
+      <article>
+        <h3>Signal parser</h3>
+        <p>Transforms final prose into a structured trade intent with symbol, action, rating, confidence, and thesis excerpt.</p>
+      </article>
+      <article>
+        <h3>Risk policy</h3>
+        <p>Checks allowlists, confidence, sizing, exposure, spread, shorting, and pattern day trading constraints.</p>
+      </article>
+      <article>
+        <h3>Replay harnesses</h3>
+        <p>Use archived decisions to keep parsing and policy behavior stable as prompts, models, and broker adapters evolve.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

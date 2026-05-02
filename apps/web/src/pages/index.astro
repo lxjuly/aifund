@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SystemVisual from "../components/SystemVisual.astro";
+---
+
+<BaseLayout
+  title="AI Fund | Agentic Trading Research"
+  description="AI Fund is an agentic trading research and paper-trading system built around TradingAgents, local model serving, and strict execution controls."
+>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Agentic trading research</p>
+      <h1>AI Fund</h1>
+      <p>
+        A research system for studying multi-agent market analysis, replayable decision logs,
+        and guarded paper-trading workflows.
+      </p>
+      <div class="hero-actions" aria-label="Primary actions">
+        <a class="button primary" href="/methodology">View Methodology</a>
+        <a class="button secondary" href="/research">Research Journal</a>
+      </div>
+    </div>
+    <div class="status-board" aria-label="Current system status">
+      <div>
+        <span>Serving</span>
+        <strong>Thunder + Ollama</strong>
+      </div>
+      <div>
+        <span>Execution</span>
+        <strong>Dry run first</strong>
+      </div>
+      <div>
+        <span>Broker Target</span>
+        <strong>Moomoo OpenAPI</strong>
+      </div>
+      <div>
+        <span>Public Host</span>
+        <strong>Cloudflare Pages</strong>
+      </div>
+    </div>
+  </section>
+
+  <SystemVisual />
+
+  <section class="content-band">
+    <div class="section-heading">
+      <p class="eyebrow">Operating principles</p>
+      <h2>Research first. Controls before execution.</h2>
+    </div>
+    <div class="principle-grid">
+      <article>
+        <h3>Decision engine</h3>
+        <p>TradingAgents produces a final trade decision through analyst reports, debate, risk review, and portfolio judgment.</p>
+      </article>
+      <article>
+        <h3>Replayable output</h3>
+        <p>Real decisions are captured into fixtures so parser and policy behavior can be tested before future changes ship.</p>
+      </article>
+      <article>
+        <h3>Execution boundary</h3>
+        <p>The broker adapter remains separate from the agent graph, with dry-run and simulated trading as the default path.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

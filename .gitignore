@@ -218,4 +218,11 @@ __marimo__/
 # Cache
 **/data_cache/
 
+# Node / web app
+node_modules/
+.astro/
+.vercel/
+.wrangler/
+apps/web/dist/
+
 .env.local

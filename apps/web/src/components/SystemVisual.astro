@@ -1,0 +1,18 @@
+---
+const stages = [
+  { eyebrow: "01", title: "Market Inputs", detail: "Yahoo/yfinance, filings, news, and technical indicators" },
+  { eyebrow: "02", title: "Agent Debate", detail: "Analysts, bull/bear researchers, trader, and risk reviewers" },
+  { eyebrow: "03", title: "Policy Gate", detail: "Structured intent, allowlists, sizing caps, and dry-run checks" },
+  { eyebrow: "04", title: "Paper Execution", detail: "Moomoo OpenAPI simulated trading once OpenD is configured" },
+];
+---
+
+<section class="system-visual" aria-label="AI Fund system flow">
+  {stages.map((stage) => (
+    <article class="system-node">
+      <p>{stage.eyebrow}</p>
+      <h3>{stage.title}</h3>
+      <span>{stage.detail}</span>
+    </article>
+  ))}
+</section>

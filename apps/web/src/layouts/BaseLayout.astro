@@ -1,0 +1,44 @@
+---
+import "../styles/site.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const navItems = [
+  { href: "/", label: "Overview" },
+  { href: "/methodology", label: "Methodology" },
+  { href: "/research", label: "Research" },
+  { href: "/disclosures", label: "Disclosures" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="AI Fund home">
+        <span class="brand-mark">AF</span>
+        <span>AI Fund</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>AI Fund is a research and paper-trading system. It is not an investment adviser, broker, or fund offering.</p>
+      <a href="/disclosures">Read disclosures</a>
+    </footer>
+  </body>
+</html>

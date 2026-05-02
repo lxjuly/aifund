@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const reports = [
+  {
+    title: "NVDA dry-run decision",
+    date: "2026-04-24",
+    rating: "HOLD",
+    summary: "First successful end-to-end run against Thunder + Ollama. Policy correctly rejected order placement because hold signals do not submit orders.",
+  },
+  {
+    title: "Replay harness rollout",
+    date: "Current",
+    rating: "Harness",
+    summary: "Parser, risk policy, runner, replay, and capture harnesses protect the boundary between model output and executable intent.",
+  },
+  {
+    title: "Broker integration pivot",
+    date: "Current",
+    rating: "Design",
+    summary: "Moomoo OpenAPI is the preferred broker target. Integration remains simulated-only until OpenD and account workflows are validated.",
+  },
+];
+---
+
+<BaseLayout
+  title="Research Journal | AI Fund"
+  description="Selected AI Fund research notes, paper-trading runs, and system milestones."
+>
+  <section class="page-hero compact">
+    <p class="eyebrow">Research journal</p>
+    <h1>Run notes and system milestones.</h1>
+    <p>
+      This page will publish selected paper-trading research artifacts and engineering milestones.
+      It does not publish trade recommendations.
+    </p>
+  </section>
+
+  <section class="report-list" aria-label="Research notes">
+    {reports.map((report) => (
+      <article class="report-row">
+        <div>
+          <p>{report.date}</p>
+          <h2>{report.title}</h2>
+        </div>
+        <span>{report.rating}</span>
+        <p>{report.summary}</p>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

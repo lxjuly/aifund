@@ -85,13 +85,26 @@ Each task should be treated as a deliverable. Agents should pick from the highes
 
 ### TA-009: Scaffold Cloudflare Pages public website
 
-- Status: `Ready`
+- Status: `Done`
 - Goal: create the first public AI Fund website under `apps/web`
 - Done when:
   - site can build locally
   - Cloudflare Pages deployment notes exist
   - first pages avoid regulated fund-offering language
   - disclosure page exists
+
+Note: the initial Astro scaffold and Cloudflare Pages docs are in place. Local build verification still needs dependency installation in an environment with working npm registry access.
+
+### TA-010: Verify and polish the Cloudflare Pages website
+
+- Status: `Ready`
+- Depends on: `TA-009`
+- Goal: install web dependencies, verify the Astro build, and refine the first pass UI
+- Done when:
+  - `npm install` completes under `apps/web`
+  - `npm run build` passes
+  - homepage, methodology, research, and disclosures pages are visually reviewed
+  - no upstream TradingAgents visual assets are used
 
 ## Waiting On Human
 
