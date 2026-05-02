@@ -4,6 +4,22 @@
 
 Use Moomoo OpenAPI as the preferred broker integration target, replacing Alpaca as the default path for new execution work.
 
+## AI Skills
+
+The official Moomoo OpenD skills are installed globally for Codex at:
+
+```text
+/Users/youmiss/.codex/skills/moomooapi
+/Users/youmiss/.codex/skills/install-moomoo-opend
+```
+
+These skills came from Moomoo's official `opend-skills.zip` package and include:
+
+- `moomooapi`: market data, account, order, position, subscription, and paper-trading helper scripts
+- `install-moomoo-opend`: OpenD installation and SDK setup assistant
+
+Future Moomoo adapter work should use these skills as the first reference before hand-writing SDK calls.
+
 ## Why Moomoo Fits
 
 - It supports both quotation and trading APIs.
@@ -61,3 +77,4 @@ Live trading, options, short selling, margin, extended-hours orders, and multi-m
 - Moomoo fee docs: https://openapi.moomoo.com/moomoo-api-doc/en/intro/fee.html
 - Moomoo trade overview: https://openapi.moomoo.com/moomoo-api-doc/en/trade/overview.html
 - Moomoo place order docs: https://openapi.moomoo.com/moomoo-api-doc/en/trade/place-order.html
+- Moomoo AI Integration & OpenClaw: https://openapi.moomoo.com/moomoo-api-doc/en/intro/ai.html

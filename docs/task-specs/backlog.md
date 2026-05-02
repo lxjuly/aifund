@@ -106,6 +106,70 @@ Note: the initial Astro scaffold and Cloudflare Pages docs are in place. Local b
   - homepage, methodology, research, and disclosures pages are visually reviewed
   - no upstream TradingAgents visual assets are used
 
+### TA-011: Add SQLPrism semantic visualization layer
+
+- Status: `Ready`
+- Depends on: `TA-009`
+- Goal: use SQLPrism to turn curated SQL over AI Fund datasets into Vega-Lite charts
+- Done when:
+  - initial market/run dataset schemas are represented as sample JSON
+  - at least one SQLPrism query generates a Vega-Lite spec
+  - the research page renders a chart from SQLPrism output
+  - Moomoo/OpenD remains behind ingestion, not directly exposed to the public site
+
+### TA-012: Define Cloudflare-native semantic platform
+
+- Status: `Ready`
+- Depends on: `TA-011`
+- Goal: define the Cloudflare-native backend/storage plan for SQLPrism visualization and Moomoo ingestion
+- Done when:
+  - Cloudflare Pages, Containers, Workers AI, R2, and D1 responsibilities are documented
+  - R2/Parquet vs D1 persistence split is documented
+  - Python API query contract is documented
+  - detailed task roadmap exists
+
+### TA-013: Define semantic dataset contracts
+
+- Status: `Ready`
+- Depends on: `TA-012`
+- Goal: define schemas and sample rows for the initial semantic datasets
+- Done when:
+  - `market_bars`, `market_snapshots`, `agent_runs`, and `agent_decisions` schemas exist
+  - sample rows support chart prototyping
+  - public/private dataset boundaries are explicit
+
+### TA-014: Add SQLPrism frontend chart prototype
+
+- Status: `Done`
+- Depends on: `TA-013`
+- Goal: use SQLPrism on the frontend to turn SQL into Vega-Lite and render fixture-backed charts
+- Done when:
+  - SQLPrism is available to `apps/web`
+  - research page renders at least one Vega-Lite chart
+  - frontend sends no direct Moomoo/OpenD requests
+
+### TA-015: Add Python semantic query API skeleton
+
+- Status: `Ready`
+- Depends on: `TA-013`
+- Goal: add a FastAPI query service that validates SQL and returns tabular rows only
+- Done when:
+  - `/health` and `/query` exist
+  - DuckDB queries local fixtures
+  - read-only allowlisted SQL is enforced
+  - Python tests cover accepted and rejected SQL
+
+### TA-016: Build Moomoo market-data ingestion
+
+- Status: `Ready`
+- Depends on: `TA-015`
+- Goal: ingest Moomoo snapshot/kline data into normalized AI Fund datasets
+- Done when:
+  - OpenD assumptions are documented
+  - ingestion supports `market_bars` and `market_snapshots`
+  - generated artifacts match the SQLPrism semantic dataset schema
+  - no account/order/position data is published publicly
+
 ## Waiting On Human
 
 ### TH-001: External runtime troubleshooting
