@@ -73,6 +73,26 @@ Each task should be treated as a deliverable. Agents should pick from the highes
   - mark AWS/NIM docs as historical
   - move them under an archive section
 
+### TA-008: Pivot broker integration from Alpaca to Moomoo OpenAPI
+
+- Status: `Ready`
+- Goal: replace Alpaca as the default broker target for new execution work
+- Done when:
+  - Moomoo adapter interface is designed
+  - OpenD runtime assumptions are documented
+  - existing Alpaca adapter is retained only as optional/historical
+  - simulated trading remains the default execution path
+
+### TA-009: Scaffold Cloudflare Pages public website
+
+- Status: `Ready`
+- Goal: create the first public AI Fund website under `apps/web`
+- Done when:
+  - site can build locally
+  - Cloudflare Pages deployment notes exist
+  - first pages avoid regulated fund-offering language
+  - disclosure page exists
+
 ## Waiting On Human
 
 ### TH-001: External runtime troubleshooting
@@ -84,3 +104,8 @@ Each task should be treated as a deliverable. Agents should pick from the highes
 
 - Status: `Waiting on Human`
 - Goal: any action that creates or materially changes recurring spend
+
+### TH-003: Moomoo account and OpenD setup
+
+- Status: `Waiting on Human`
+- Goal: actions requiring Moomoo account login, API agreements, OpenD login, or trade unlock credentials

@@ -92,6 +92,6 @@ This is the narrowest place where a mistake can turn model slop into a real trad
 
 - fixture-based replay harness for archived final decisions
 - quote/spread harness with realistic market snapshots
-- Alpaca adapter response-shape harness with recorded API payloads
+- Moomoo OpenAPI adapter response-shape harness with recorded OpenD/SDK payloads
 - scheduled paper-trading replay harness using a fixed symbol/date matrix
 - docs freshness checks for execution architecture and live-trading boundaries

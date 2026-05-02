@@ -89,12 +89,15 @@ Execution/risk settings:
 - `TRADINGAGENTS_BLOCK_PDT`
 - `TRADINGAGENTS_SUBMIT_ORDERS`
 
-Alpaca settings:
+Moomoo OpenAPI settings:
 
-- `ALPACA_API_KEY`
-- `ALPACA_SECRET_KEY`
-- `ALPACA_BASE_URL`
-- `ALPACA_PAPER`
+- `MOOMOO_OPEND_HOST`
+- `MOOMOO_OPEND_PORT`
+- `MOOMOO_TRADING_ENV`
+- `MOOMOO_TRADING_MARKET`
+- `MOOMOO_SECURITY_FIRM`
+- `MOOMOO_ACCOUNT_ID`
+- `MOOMOO_UNLOCK_PASSWORD`
 
 ## Recommended local path
 
@@ -104,3 +107,5 @@ Alpaca settings:
 4. inspect the saved TradingAgents log
 5. capture the result into the replay corpus with `scripts/capture_replay_case.py`
 6. run `uv run python scripts/run_harnesses.py`
+
+Broker-connected paper/simulated execution is a later step. The default local verification path should work before connecting Moomoo OpenD or submitting any broker-side order.

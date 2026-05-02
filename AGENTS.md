@@ -28,7 +28,7 @@ Operate autonomously by default.
 - Keep execution, broker access, and risk controls separate from the debate graph.
 - Prefer small, reviewable changes.
 - Default to Yahoo/yfinance for research unless a task explicitly upgrades the data source.
-- Default to Alpaca paper trading before any live-trading changes.
+- Default to Moomoo OpenAPI paper/simulated trading before any live-trading changes.
 - Prefer low-cost and reversible defaults for infrastructure.
 - Prefer Infrastructure as Code over one-off console setup when practical.
 - Document material design decisions in `docs/system-specs/` or `docs/task-specs/`.
@@ -47,7 +47,8 @@ Operate autonomously by default.
 - Support a custom OpenAI-compatible model endpoint
 - Parse final trade decisions into a structured trade intent
 - Apply a hard risk-policy layer before any broker call
-- Start with Alpaca paper trading and small-notional guardrails
+- Start with Moomoo OpenAPI paper/simulated trading and small-notional guardrails
+- Publish the public website on Cloudflare Pages by default.
 - Use harnesses to guard the parser, policy, and orchestration boundaries
 
 ## Safety Boundaries

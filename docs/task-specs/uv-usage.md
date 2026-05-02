@@ -13,6 +13,13 @@ cd /Users/youmiss/workplace/TradingAgents
 uv sync
 ```
 
+If the local folder has been renamed, use:
+
+```bash
+cd /Users/youmiss/workplace/aifund
+uv sync
+```
+
 ## Recommended environment setup
 
 Start from:

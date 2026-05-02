@@ -2,7 +2,7 @@
 
 Use this folder for bounded implementation specs such as:
 
-- Alpaca paper-trading integration
+- Moomoo OpenAPI simulated-trading integration
 - signal parser hardening
 - risk policy revisions
 - deployment automation tasks

@@ -13,7 +13,8 @@ runtime_policy:
   prefer_local_verification: true
   prefer_low_cost_backends: true
   default_serving_path: thunder_ollama
-  default_execution_mode: alpaca_paper
+  default_execution_mode: moomoo_simulated
+  default_public_site_host: cloudflare_pages
 ---
 
 # TradingAgents Workflow
@@ -24,7 +25,8 @@ Advance TradingAgents toward a reliable, low-cost paper-trading workflow with:
 
 - TradingAgents as the decision engine
 - Thunder Compute + Ollama as the recommended model-serving path
-- Alpaca paper trading as the default execution environment
+- Moomoo OpenAPI simulated trading as the default broker execution path
+- Cloudflare Pages as the recommended public website host
 - harnesses and replay fixtures as the safety layer for autonomous development
 
 ## Current System Boundaries
@@ -33,6 +35,8 @@ Advance TradingAgents toward a reliable, low-cost paper-trading workflow with:
 - Do not require paid AWS infrastructure unless explicitly approved.
 - Prefer Thunder Compute over AWS for model-serving experiments.
 - Prefer local dry runs before any broker submission.
+- Prefer Moomoo OpenAPI over Alpaca for new broker integration work.
+- Prefer Cloudflare Pages over Vercel for public website work.
 - Keep execution controls outside the debate graph.
 
 ## Default Agent Behavior
