@@ -45,6 +45,8 @@ Acceptance:
 - research page renders a chart from SQL + rows
 - backend is not required for the prototype
 
+Local note: until SQLPrism is published, `apps/web` can use the sibling workspace dependency `file:../../../sqlprism`. Cloudflare production builds should use a GitHub or npm dependency once available.
+
 ### CF-003: Add Python Query API Skeleton
 
 Deliverables:

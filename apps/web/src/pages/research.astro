@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SqlPrismChart from "../components/SqlPrismChart.astro";
 
 const reports = [
   {
@@ -35,6 +36,8 @@ const reports = [
       It does not publish trade recommendations.
     </p>
   </section>
+
+  <SqlPrismChart />
 
   <section class="report-list" aria-label="Research notes">
     {reports.map((report) => (

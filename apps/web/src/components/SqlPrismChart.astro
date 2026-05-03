@@ -1,0 +1,49 @@
+---
+import { marketBars } from "../data/market-bars";
+
+const sql = `SELECT timestamp, close
+FROM market_bars
+WHERE symbol = 'US.NVDA' AND timeframe = 'K_DAY'
+ORDER BY timestamp`;
+---
+
+<section class="chart-lab" aria-label="SQLPrism chart prototype">
+  <div class="chart-copy">
+    <p class="eyebrow">SQLPrism prototype</p>
+    <h2>SQL becomes a chart grammar. The backend only returns rows.</h2>
+    <pre><code>{sql}</code></pre>
+  </div>
+  <div class="chart-frame">
+    <div id="sqlprism-price-chart" data-sql={sql} data-rows={JSON.stringify(marketBars)}></div>
+  </div>
+</section>
+
+<script>
+  import * as sqlprism from "sqlprism";
+  import type { VisualizationSpec } from "vega-embed";
+  import embed from "vega-embed";
+
+  const target = document.querySelector<HTMLElement>("#sqlprism-price-chart");
+
+  if (target) {
+    const sql = target.dataset.sql ?? "";
+    const rows = JSON.parse(target.dataset.rows ?? "[]");
+    const { vega } = sqlprism.refract(sql, { outputs: ["vega"] });
+
+    if (vega) {
+      const mark = vega.mark === "line" || vega.mark === "bar" || vega.mark === "point"
+        ? vega.mark
+        : "point";
+      const spec: VisualizationSpec = {
+        ...vega,
+        width: "container",
+        height: 320,
+        title: "NVDA close price fixture",
+        data: { values: rows },
+        mark: { type: mark, tooltip: true },
+      };
+
+      embed(target, spec, { actions: false, renderer: "svg" });
+    }
+  }
+</script>
