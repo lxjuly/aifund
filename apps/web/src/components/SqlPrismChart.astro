@@ -61,6 +61,7 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
         ))}
       </svg>
       <p class="chart-status">Static fixture chart rendered. Vega enhancement loads in the browser.</p>
+      <div class="chart-enhancement" aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -98,7 +99,22 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
         mark: { type: mark, tooltip: true },
       } as unknown as VisualizationSpec;
 
-      await embed(target, spec, { actions: false, renderer: "svg" });
+      const enhancementTarget = target.querySelector<HTMLElement>(".chart-enhancement");
+
+      if (!enhancementTarget) {
+        throw new Error("Chart enhancement target was not found.");
+      }
+
+      const result = await embed(enhancementTarget, spec, { actions: false, renderer: "svg" });
+      const renderedSvg = enhancementTarget.querySelector("svg");
+
+      if (!renderedSvg) {
+        result.finalize();
+        throw new Error("Vega did not render an SVG.");
+      }
+
+      target.classList.add("is-enhanced");
+      enhancementTarget.removeAttribute("aria-hidden");
     } catch (error) {
       const status = target.querySelector<HTMLElement>(".chart-status");
 

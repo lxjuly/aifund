@@ -355,6 +355,18 @@ a {
   font-size: 0.84rem;
 }
 
+.chart-enhancement {
+  display: none;
+}
+
+#sqlprism-price-chart.is-enhanced .fixture-chart {
+  display: none;
+}
+
+#sqlprism-price-chart.is-enhanced .chart-enhancement {
+  display: block;
+}
+
 .report-row {
   display: grid;
   grid-template-columns: minmax(12rem, 0.8fr) 8rem minmax(0, 1.2fr);
