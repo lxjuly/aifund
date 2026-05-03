@@ -60,8 +60,8 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
           </g>
         ))}
       </svg>
-      <p class="chart-status">Static fixture chart rendered. Vega enhancement loads in the browser.</p>
       <div class="chart-enhancement" aria-hidden="true"></div>
+      <p class="chart-status" role="status" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -92,7 +92,7 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
         : "point";
       const spec = {
         ...vega,
-        width: "container",
+        width: Math.max(target.clientWidth - 32, 320),
         height: 320,
         title: "NVDA close price fixture",
         data: { values: rows },
@@ -119,6 +119,7 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
       const status = target.querySelector<HTMLElement>(".chart-status");
 
       if (status) {
+        target.classList.add("has-chart-error");
         status.textContent = error instanceof Error
           ? `Vega enhancement failed: ${error.message}`
           : "Vega enhancement failed.";

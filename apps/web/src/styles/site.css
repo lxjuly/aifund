@@ -350,13 +350,18 @@ a {
 }
 
 .chart-status {
-  margin: 0.75rem 0 0;
-  color: var(--muted);
+  display: none;
+  margin: 1rem 0 0;
+  color: var(--signal);
   font-size: 0.84rem;
 }
 
 .chart-enhancement {
-  display: none;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 #sqlprism-price-chart.is-enhanced .fixture-chart {
@@ -364,6 +369,13 @@ a {
 }
 
 #sqlprism-price-chart.is-enhanced .chart-enhancement {
+  height: auto;
+  overflow: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#sqlprism-price-chart.has-chart-error .chart-status {
   display: block;
 }
 
