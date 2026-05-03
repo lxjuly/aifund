@@ -19,7 +19,7 @@ ORDER BY timestamp`;
 </section>
 
 <script>
-  import * as sqlprism from "sqlprism";
+  import { refractSqlToVega } from "../utils/sqlprism-adapter";
   import type { VisualizationSpec } from "vega-embed";
   import embed from "vega-embed";
 
@@ -28,20 +28,20 @@ ORDER BY timestamp`;
   if (target) {
     const sql = target.dataset.sql ?? "";
     const rows = JSON.parse(target.dataset.rows ?? "[]");
-    const { vega } = sqlprism.refract(sql, { outputs: ["vega"] });
+    const { vega } = refractSqlToVega(sql);
 
     if (vega) {
       const mark = vega.mark === "line" || vega.mark === "bar" || vega.mark === "point"
         ? vega.mark
         : "point";
-      const spec: VisualizationSpec = {
+      const spec = {
         ...vega,
         width: "container",
         height: 320,
         title: "NVDA close price fixture",
         data: { values: rows },
         mark: { type: mark, tooltip: true },
-      };
+      } as unknown as VisualizationSpec;
 
       embed(target, spec, { actions: false, renderer: "svg" });
     }

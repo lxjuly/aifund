@@ -12,7 +12,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "astro": "^5.13.0",
-    "sqlprism": "file:../../../sqlprism",
     "typescript": "^5.9.0",
     "vega": "^6.2.0",
     "vega-embed": "^7.1.0",
