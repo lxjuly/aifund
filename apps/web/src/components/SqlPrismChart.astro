@@ -5,6 +5,25 @@ const sql = `SELECT timestamp, close
 FROM market_bars
 WHERE symbol = 'US.NVDA' AND timeframe = 'K_DAY'
 ORDER BY timestamp`;
+
+const closes = marketBars.map((bar) => bar.close);
+const minClose = Math.min(...closes);
+const maxClose = Math.max(...closes);
+const chartWidth = 640;
+const chartHeight = 320;
+const chartPadding = 36;
+const chartRange = maxClose - minClose || 1;
+const chartPoints = marketBars.map((bar, index) => {
+  const x = chartPadding + (index / (marketBars.length - 1)) * (chartWidth - chartPadding * 2);
+  const y = chartHeight - chartPadding - ((bar.close - minClose) / chartRange) * (chartHeight - chartPadding * 2);
+
+  return {
+    ...bar,
+    x,
+    y,
+  };
+});
+const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
 ---
 
 <section class="chart-lab" aria-label="SQLPrism chart prototype">
@@ -14,7 +33,35 @@ ORDER BY timestamp`;
     <pre><code>{sql}</code></pre>
   </div>
   <div class="chart-frame">
-    <div id="sqlprism-price-chart" data-sql={sql} data-rows={JSON.stringify(marketBars)}></div>
+    <div id="sqlprism-price-chart" data-sql={sql} data-rows={JSON.stringify(marketBars)}>
+      <svg
+        class="fixture-chart"
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+        role="img"
+        aria-label="NVDA close price fixture line chart"
+      >
+        <line
+          x1={chartPadding}
+          x2={chartPadding}
+          y1={chartPadding}
+          y2={chartHeight - chartPadding}
+        />
+        <line
+          x1={chartPadding}
+          x2={chartWidth - chartPadding}
+          y1={chartHeight - chartPadding}
+          y2={chartHeight - chartPadding}
+        />
+        <path d={chartPath} />
+        {chartPoints.map((point) => (
+          <g>
+            <circle cx={point.x} cy={point.y} r="4" />
+            <title>{`${point.timestamp}: ${point.close}`}</title>
+          </g>
+        ))}
+      </svg>
+      <p class="chart-status">Static fixture chart rendered. Vega enhancement loads in the browser.</p>
+    </div>
   </div>
 </section>
 
@@ -25,12 +72,20 @@ ORDER BY timestamp`;
 
   const target = document.querySelector<HTMLElement>("#sqlprism-price-chart");
 
-  if (target) {
+  async function renderChart() {
+    if (!target) {
+      return;
+    }
+
     const sql = target.dataset.sql ?? "";
     const rows = JSON.parse(target.dataset.rows ?? "[]");
     const { vega } = refractSqlToVega(sql);
 
-    if (vega) {
+    try {
+      if (!vega) {
+        throw new Error("No Vega-Lite spec generated for SQL.");
+      }
+
       const mark = vega.mark === "line" || vega.mark === "bar" || vega.mark === "point"
         ? vega.mark
         : "point";
@@ -43,7 +98,17 @@ ORDER BY timestamp`;
         mark: { type: mark, tooltip: true },
       } as unknown as VisualizationSpec;
 
-      embed(target, spec, { actions: false, renderer: "svg" });
+      await embed(target, spec, { actions: false, renderer: "svg" });
+    } catch (error) {
+      const status = target.querySelector<HTMLElement>(".chart-status");
+
+      if (status) {
+        status.textContent = error instanceof Error
+          ? `Vega enhancement failed: ${error.message}`
+          : "Vega enhancement failed.";
+      }
     }
   }
+
+  renderChart();
 </script>

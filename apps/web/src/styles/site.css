@@ -324,6 +324,37 @@ a {
   box-shadow: var(--shadow);
 }
 
+.fixture-chart {
+  display: block;
+  width: 100%;
+  min-height: 18rem;
+}
+
+.fixture-chart line {
+  stroke: rgba(23, 33, 29, 0.18);
+  stroke-width: 2;
+}
+
+.fixture-chart path {
+  fill: none;
+  stroke: var(--accent-strong);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.fixture-chart circle {
+  fill: var(--panel);
+  stroke: var(--accent-strong);
+  stroke-width: 3;
+}
+
+.chart-status {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
 .report-row {
   display: grid;
   grid-template-columns: minmax(12rem, 0.8fr) 8rem minmax(0, 1.2fr);
