@@ -1,7 +1,7 @@
 type RefractResult = {
   vega?: {
     $schema: string;
-    mark: "line" | "bar" | "point";
+    mark: "line";
     encoding: Record<string, unknown>;
   };
 };
@@ -23,11 +23,17 @@ export function refractSqlToVega(sql: string): RefractResult {
           field: "timestamp",
           type: "temporal",
           title: "Date",
+          axis: {
+            format: "%b %d",
+          },
         },
         y: {
           field: "close",
           type: "quantitative",
           title: "Close",
+          axis: {
+            format: "$,.2f",
+          },
         },
         tooltip: [
           {
@@ -39,6 +45,7 @@ export function refractSqlToVega(sql: string): RefractResult {
             field: "close",
             type: "quantitative",
             title: "Close",
+            format: "$,.2f",
           },
         ],
       },

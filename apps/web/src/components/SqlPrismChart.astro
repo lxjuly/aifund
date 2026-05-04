@@ -9,10 +9,15 @@ ORDER BY timestamp`;
 const closes = marketBars.map((bar) => bar.close);
 const minClose = Math.min(...closes);
 const maxClose = Math.max(...closes);
+const yPadding = Math.max((maxClose - minClose) * 0.4, 2);
 const chartWidth = 640;
 const chartHeight = 320;
 const chartPadding = 36;
 const chartRange = maxClose - minClose || 1;
+const yDomain = [
+  Math.floor((minClose - yPadding) * 10) / 10,
+  Math.ceil((maxClose + yPadding) * 10) / 10,
+];
 const chartPoints = marketBars.map((bar, index) => {
   const x = chartPadding + (index / (marketBars.length - 1)) * (chartWidth - chartPadding * 2);
   const y = chartHeight - chartPadding - ((bar.close - minClose) / chartRange) * (chartHeight - chartPadding * 2);
@@ -33,7 +38,12 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
     <pre><code>{sql}</code></pre>
   </div>
   <div class="chart-frame">
-    <div id="sqlprism-price-chart" data-sql={sql} data-rows={JSON.stringify(marketBars)}>
+    <div
+      id="sqlprism-price-chart"
+      data-sql={sql}
+      data-rows={JSON.stringify(marketBars)}
+      data-y-domain={JSON.stringify(yDomain)}
+    >
       <svg
         class="fixture-chart"
         viewBox={`0 0 ${chartWidth} ${chartHeight}`}
@@ -60,16 +70,14 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
           </g>
         ))}
       </svg>
-      <div class="chart-enhancement" aria-hidden="true"></div>
+      <div id="sqlprism-vega-chart" class="chart-enhancement"></div>
       <p class="chart-status" role="status" aria-live="polite"></p>
     </div>
   </div>
 </section>
 
 <script>
-  import { refractSqlToVega } from "../utils/sqlprism-adapter";
   import type { VisualizationSpec } from "vega-embed";
-  import embed from "vega-embed";
 
   const target = document.querySelector<HTMLElement>("#sqlprism-price-chart");
 
@@ -78,43 +86,96 @@ const chartPath = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} 
       return;
     }
 
-    const sql = target.dataset.sql ?? "";
-    const rows = JSON.parse(target.dataset.rows ?? "[]");
-    const { vega } = refractSqlToVega(sql);
-
     try {
+      const status = target.querySelector<HTMLElement>(".chart-status");
+
+      if (status) {
+        status.textContent = "Chart renderer: loading Vega";
+      }
+
+      const [{ refractSqlToVega }, { default: embed }] = await Promise.all([
+        import("../utils/sqlprism-adapter"),
+        import("vega-embed"),
+      ]);
+      const sql = target.dataset.sql ?? "";
+      const rows = JSON.parse(target.dataset.rows ?? "[]");
+      const yDomain = JSON.parse(target.dataset.yDomain ?? "[]");
+      const { vega } = refractSqlToVega(sql);
+
       if (!vega) {
         throw new Error("No Vega-Lite spec generated for SQL.");
       }
 
-      const mark = vega.mark === "line" || vega.mark === "bar" || vega.mark === "point"
-        ? vega.mark
-        : "point";
       const spec = {
         ...vega,
+        autosize: {
+          type: "fit",
+          contains: "padding",
+          resize: true,
+        },
+        config: {
+          view: { stroke: "transparent" },
+          axis: {
+            labelColor: "#5e6a64",
+            titleColor: "#17211d",
+            gridColor: "#d9e0d8",
+          },
+          title: {
+            color: "#17211d",
+            fontSize: 18,
+            fontWeight: "bold",
+          },
+        },
         width: Math.max(target.clientWidth - 32, 320),
-        height: 320,
+        height: 280,
         title: "NVDA close price fixture",
         data: { values: rows },
-        mark: { type: mark, tooltip: true },
+        encoding: {
+          ...vega.encoding,
+          y: {
+            ...(vega.encoding.y as Record<string, unknown>),
+            scale: {
+              domain: yDomain,
+              nice: false,
+            },
+          },
+        },
+        mark: {
+          type: "line",
+          point: {
+            filled: true,
+            fill: "#c87a2d",
+            size: 90,
+          },
+          color: "#0e4e41",
+          strokeWidth: 3,
+        },
       } as unknown as VisualizationSpec;
 
-      const enhancementTarget = target.querySelector<HTMLElement>(".chart-enhancement");
+      const enhancementTarget = target.querySelector<HTMLElement>("#sqlprism-vega-chart");
 
       if (!enhancementTarget) {
         throw new Error("Chart enhancement target was not found.");
       }
 
-      const result = await embed(enhancementTarget, spec, { actions: false, renderer: "svg" });
-      const renderedSvg = enhancementTarget.querySelector("svg");
+      const result = await embed(enhancementTarget, spec, {
+        actions: false,
+        renderer: "canvas",
+        tooltip: true,
+      });
+      const renderedChart = enhancementTarget.querySelector("canvas, svg");
 
-      if (!renderedSvg) {
+      if (!renderedChart) {
         result.finalize();
-        throw new Error("Vega did not render an SVG.");
+        throw new Error("Vega did not render a chart.");
       }
 
       target.classList.add("is-enhanced");
-      enhancementTarget.removeAttribute("aria-hidden");
+      const renderedStatus = target.querySelector<HTMLElement>(".chart-status");
+
+      if (renderedStatus) {
+        renderedStatus.textContent = "";
+      }
     } catch (error) {
       const status = target.querySelector<HTMLElement>(".chart-status");
 

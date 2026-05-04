@@ -317,7 +317,8 @@ a {
 
 .chart-frame {
   min-width: 0;
-  padding: 1rem;
+  overflow: hidden;
+  padding: clamp(1rem, 2vw, 1.5rem);
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(23, 33, 29, 0.12);
   border-radius: 8px;
@@ -352,30 +353,44 @@ a {
 .chart-status {
   display: none;
   margin: 1rem 0 0;
-  color: var(--signal);
+  color: var(--muted);
   font-size: 0.84rem;
+}
+
+.chart-status.is-visible {
+  display: block;
 }
 
 .chart-enhancement {
   display: block;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
+  min-height: 0;
+}
+
+.chart-enhancement .vega-embed {
+  width: 100%;
 }
 
 #sqlprism-price-chart.is-enhanced .fixture-chart {
   display: none;
+  pointer-events: none;
 }
 
 #sqlprism-price-chart.is-enhanced .chart-enhancement {
-  height: auto;
-  overflow: visible;
-  opacity: 1;
+  pointer-events: auto;
+}
+
+#sqlprism-price-chart.is-enhanced .chart-enhancement canvas {
+  max-width: 100%;
+}
+
+#sqlprism-price-chart.is-enhanced .chart-enhancement canvas,
+#sqlprism-price-chart.is-enhanced .chart-enhancement svg {
+  display: block;
   pointer-events: auto;
 }
 
 #sqlprism-price-chart.has-chart-error .chart-status {
+  color: var(--signal);
   display: block;
 }
 
