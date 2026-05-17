@@ -1,0 +1,25 @@
+policies:
+  fundamental_agent:
+    allowed_entities:
+      - company
+      - earnings_report
+      - security
+
+  sentiment_agent:
+    allowed_entities:
+      - news_item
+      - company
+
+  technical_agent:
+    allowed_entities:
+      - security
+
+  portfolio_strategist:
+    allowed_entities:
+      - portfolio
+      - security
+      - sector
+
+constraints:
+  - all_recommendations_require_provenance
+  - speculative_validation_required_before_execution
