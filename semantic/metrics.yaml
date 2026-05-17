@@ -1,0 +1,8 @@
+metrics:
+  - revenue_growth
+  - earnings_surprise
+  - momentum_score
+  - volatility
+  - drawdown
+  - sentiment_score
+  - risk_exposure
