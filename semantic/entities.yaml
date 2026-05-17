@@ -1,0 +1,20 @@
+entities:
+  - company
+  - security
+  - sector
+  - portfolio
+  - earnings_report
+  - news_item
+
+relationships:
+  - from: security
+    to: company
+    relation: represents
+
+  - from: company
+    to: sector
+    relation: belongs_to
+
+  - from: earnings_report
+    to: company
+    relation: reported_by
