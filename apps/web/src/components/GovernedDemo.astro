@@ -1,0 +1,127 @@
+<section class="demo-band" id="demo">
+  <div class="section-heading">
+    <p class="eyebrow">Live governed demo</p>
+    <h2>Intent to recommendation, with a trace.</h2>
+    <p>
+      This demo calls the deployed <code>/api/analyze</code> endpoint and shows how
+      AIfund turns a research intent into a semantic plan, validates it through a
+      governed dry run, and returns a provenance-backed recommendation.
+    </p>
+  </div>
+
+  <div class="demo-shell">
+    <form class="demo-form" id="governed-demo-form">
+      <label>
+        Research intent
+        <textarea id="demo-intent" name="intent" rows="4">Find attractive NVDA alternatives</textarea>
+      </label>
+      <label>
+        Subject
+        <input id="demo-subject" name="subject" value="NVDA" />
+      </label>
+      <button class="button primary" type="submit">Run governed analysis</button>
+      <p class="demo-status" id="demo-status">Ready to run semantic planning and policy validation.</p>
+    </form>
+
+    <div class="demo-output" id="demo-output" aria-live="polite">
+      <article class="demo-card placeholder">
+        <h3>Pipeline output</h3>
+        <p>Run the demo to visualize the semantic plan, dry-run validation, recommendation, and provenance trace.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector("#governed-demo-form");
+  const output = document.querySelector("#demo-output");
+  const status = document.querySelector("#demo-status");
+  const intentInput = document.querySelector("#demo-intent");
+  const subjectInput = document.querySelector("#demo-subject");
+
+  const escapeHtml = (value) => String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+  const chips = (items = []) => items
+    .map((item) => `<span class="demo-chip">${escapeHtml(item)}</span>`)
+    .join("");
+
+  const render = (data) => {
+    const plan = data.semanticPlan;
+    const dryRun = data.dryRun;
+    const rec = data.recommendation;
+
+    output.innerHTML = `
+      <article class="demo-card">
+        <div class="demo-card-head">
+          <h3>Semantic plan</h3>
+          <span>planned</span>
+        </div>
+        <p><strong>Intent:</strong> ${escapeHtml(plan.intent)}</p>
+        <p><strong>Subject:</strong> ${escapeHtml(plan.subject)}</p>
+        <div class="demo-chip-group">${chips(plan.agents)}</div>
+      </article>
+
+      <article class="demo-card">
+        <div class="demo-card-head">
+          <h3>Governed dry run</h3>
+          <span>${dryRun.approved ? "approved" : "blocked"}</span>
+        </div>
+        <p><strong>Policy checks</strong></p>
+        <div class="demo-chip-group">${chips(dryRun.policyChecks)}</div>
+        <p><strong>Entities touched</strong></p>
+        <div class="demo-chip-group">${chips(dryRun.entitiesTouched)}</div>
+      </article>
+
+      <article class="demo-card recommendation-card">
+        <div class="demo-card-head">
+          <h3>Recommendation</h3>
+          <span>selected</span>
+        </div>
+        <div class="recommendation-score">${escapeHtml(rec.asset)} · ${Math.round(rec.score * 100)}%</div>
+        <p>${escapeHtml(rec.rationale)}</p>
+      </article>
+
+      <article class="demo-card">
+        <div class="demo-card-head">
+          <h3>Provenance trace</h3>
+          <span>traceable</span>
+        </div>
+        <div class="demo-chip-group">${chips(rec.provenance)}</div>
+      </article>
+    `;
+  };
+
+  const runDemo = async () => {
+    status.textContent = "Running semantic planning and governed dry run...";
+    try {
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          intent: intentInput.value,
+          subject: subjectInput.value,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      render(data);
+      status.textContent = "Completed. Recommendation generated with governed provenance.";
+    } catch (error) {
+      status.textContent = `Demo failed: ${error.message}`;
+    }
+  };
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    runDemo();
+  });
+</script>
