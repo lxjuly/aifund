@@ -1,6 +1,6 @@
 # AIfund
 
-**AIfund is a governed semantic execution platform for autonomous financial intelligence agents.**
+**AIfund is a governed recommendation and analytics platform for autonomous financial intelligence agents.**
 
 This project explores how multi-agent financial research systems can move beyond direct tool calling into a safer execution model:
 
@@ -13,9 +13,20 @@ agent intent
   -> lineage-backed recommendation
 ```
 
-The goal is not to build a black-box trading bot. The goal is to build a platform substrate for trusted financial research agents: semantic catalogs, policy mediation, provenance, experimentation, and eventually WASM-based execution sandboxes that can validate agent-generated plans before they touch real data or trading workflows.
+The goal is not to build a black-box trading bot.
+
+The goal is to build a platform substrate for trusted financial intelligence systems:
+- semantic catalogs
+- policy mediation
+- recommendation pipelines
+- provenance and lineage
+- experimentation loops
+- governed execution runtimes
+- eventually WASM-based execution sandboxes
 
 > Research and educational use only. This repository is not financial, investment, or trading advice.
+
+---
 
 ## Why this exists
 
@@ -25,7 +36,12 @@ Most AI trading demos follow a simple pattern:
 LLM -> market data tools -> buy/sell recommendation
 ```
 
-That architecture is hard to trust. It does not explain which entities were used, which policies applied, which datasets were touched, whether the plan was semantically valid, or how downstream agents should trust the result.
+That architecture is difficult to trust because it does not explain:
+- which entities were used
+- which policies applied
+- which datasets were touched
+- whether the plan was semantically valid
+- how downstream systems should trust the output
 
 AIfund is designed around a different boundary:
 
@@ -33,35 +49,97 @@ AIfund is designed around a different boundary:
 intent -> governed execution plan
 ```
 
-The platform direction is inspired by data platforms, semantic layers, query planners, policy engines, and runtime isolation systems.
+The platform direction is inspired by:
+- recommendation systems
+- semantic layers
+- governed analytics platforms
+- query planners
+- policy engines
+- runtime isolation systems
 
-## Target architecture
+---
+
+## Architecture
+
+See:
+
+- [docs/architecture-diagram.md](docs/architecture-diagram.md)
+
+Core concepts:
 
 ```text
-                    Portfolio Strategist
-                             |
-                    semantic task planning
-                             |
-        +--------------------+--------------------+
-        |                    |                    |
- Fundamental Agent     Sentiment Agent      Technical Agent
-        |                    |                    |
-        +--------------------+--------------------+
-                             |
-                   Semantic Execution Layer
-                             |
-                  SQL / logical plan compiler
-                             |
-                Policy, lineage, and cost checks
-                             |
-              WASM speculative dry-run sandbox
-                             |
-                    Approved execution
-                             |
-             Financial datasets / tools / cache
-                             |
-             Recommendation + provenance output
+Portfolio Mixer
+  -> candidate retrieval
+  -> multi-agent signal generation
+  -> semantic validation
+  -> policy-aware dry run
+  -> ranking and selection
+  -> recommendation provenance
 ```
+
+---
+
+## Multi-agent philosophy
+
+Agents in AIfund are not intended to directly execute trades.
+
+Instead, agents act as:
+
+```text
+specialized semantic signal generators
+```
+
+Examples:
+- Fundamental Agent
+- Sentiment Agent
+- Technical Agent
+- Risk Agent
+- Portfolio Strategist
+
+Agents generate structured signals which are then:
+- validated through semantic policies
+- enriched with metadata
+- ranked and filtered
+- traced through provenance
+- evaluated through experimentation loops
+
+This architecture separates:
+
+```text
+reasoning
+selection
+execution
+```
+
+instead of collapsing them into a single LLM interaction.
+
+---
+
+## Governed research demo
+
+A minimal governed recommendation flow is available in:
+
+```text
+examples/governed_research_demo.py
+```
+
+The current demo shows:
+
+```text
+intent
+  -> semantic plan
+  -> governed dry run
+  -> recommendation selection
+  -> provenance trace
+```
+
+Run locally:
+
+```bash
+python examples/governed_research_demo.py
+```
+
+---
 
 ## MVP roadmap
 
@@ -89,30 +167,50 @@ runtime/
   execution_trace.py
 ```
 
-### 3. Speculative execution
+### 3. Recommendation pipeline
 
-Dry-run agent-generated plans against a virtual metadata catalog before real execution. The first version is a Python simulation; the intended research direction is a WASM/WASI sandbox for deterministic, capability-limited execution.
-
-### 4. Recommendation and experimentation loop
-
-Track strategy versions, agent configurations, features, recommendations, outcomes, and risk metrics so the system becomes an experimentation platform rather than a one-off prediction demo.
-
-### 5. Lineage and provenance
-
-Every recommendation should be explainable through an execution trace:
+Build a recommendation system inspired by production ranking and experimentation platforms.
 
 ```text
-recommendation
-  -> strategist agent
-  -> analyst agents
-  -> semantic entities and metrics
-  -> datasets and source tools
-  -> policy checks
+candidate retrieval
+  -> feature hydration
+  -> ranking
+  -> filtering
+  -> selection
 ```
+
+### 4. Experimentation and feedback
+
+Track:
+- strategy versions
+- recommendation outcomes
+- portfolio risk
+- hit rate
+- drawdown
+- agent configurations
+
+so the system evolves into an experimentation platform rather than a one-off prediction demo.
+
+### 5. Speculative execution research
+
+Dry-run agent-generated plans against a virtual metadata catalog before real execution.
+
+The initial implementation is Python-based; the longer-term research direction explores WASM/WASI-based capability-limited execution.
+
+---
 
 ## Current foundation
 
-This repository currently builds on the open-source TradingAgents framework, which provides a multi-agent financial trading workflow with analyst, researcher, trader, risk, and portfolio-manager roles. AIfund extends that base toward governed semantic execution and trusted agent runtime infrastructure.
+This repository currently builds on the open-source TradingAgents framework, which provides a multi-agent financial trading workflow with analyst, researcher, trader, risk, and portfolio-manager roles.
+
+AIfund extends that foundation toward:
+- governed semantic execution
+- recommendation infrastructure
+- experimentation systems
+- trusted analytical workflows
+- intelligent platform runtime concepts
+
+---
 
 ## Upstream attribution
 
@@ -132,11 +230,13 @@ If you use the upstream TradingAgents work, please cite:
 }
 ```
 
+---
+
 ## Installation
 
 ```bash
 uv sync
-uv run python -m cli.main analyze
+python examples/governed_research_demo.py
 ```
 
 For the original TradingAgents CLI and package usage, see the upstream project documentation.
