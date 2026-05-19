@@ -33,24 +33,45 @@
 </section>
 
 <script>
-  const form = document.querySelector("#governed-demo-form");
-  const output = document.querySelector("#demo-output");
-  const status = document.querySelector("#demo-status");
-  const intentInput = document.querySelector("#demo-intent");
-  const subjectInput = document.querySelector("#demo-subject");
+  type DemoResponse = {
+    semanticPlan: {
+      intent: string;
+      subject: string;
+      agents: string[];
+    };
+    dryRun: {
+      approved: boolean;
+      policyChecks: string[];
+      entitiesTouched: string[];
+    };
+    recommendation: {
+      asset: string;
+      score: number;
+      rationale: string;
+      provenance: string[];
+    };
+  };
 
-  const escapeHtml = (value) => String(value)
+  const form = document.querySelector<HTMLFormElement>("#governed-demo-form");
+  const output = document.querySelector<HTMLDivElement>("#demo-output");
+  const status = document.querySelector<HTMLParagraphElement>("#demo-status");
+  const intentInput = document.querySelector<HTMLTextAreaElement>("#demo-intent");
+  const subjectInput = document.querySelector<HTMLInputElement>("#demo-subject");
+
+  const escapeHtml = (value: unknown): string => String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
-  const chips = (items = []) => items
+  const chips = (items: string[] = []): string => items
     .map((item) => `<span class="demo-chip">${escapeHtml(item)}</span>`)
     .join("");
 
-  const render = (data) => {
+  const render = (data: DemoResponse): void => {
+    if (!output) return;
+
     const plan = data.semanticPlan;
     const dryRun = data.dryRun;
     const rec = data.recommendation;
@@ -96,8 +117,17 @@
     `;
   };
 
-  const runDemo = async () => {
-    status.textContent = "Running semantic planning and governed dry run...";
+  const setStatus = (message: string): void => {
+    if (status) status.textContent = message;
+  };
+
+  const runDemo = async (): Promise<void> => {
+    if (!intentInput || !subjectInput) {
+      setStatus("Demo form is not available.");
+      return;
+    }
+
+    setStatus("Running semantic planning and governed dry run...");
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -112,16 +142,17 @@
         throw new Error(`API returned ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as DemoResponse;
       render(data);
-      status.textContent = "Completed. Recommendation generated with governed provenance.";
-    } catch (error) {
-      status.textContent = `Demo failed: ${error.message}`;
+      setStatus("Completed. Recommendation generated with governed provenance.");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setStatus(`Demo failed: ${message}`);
     }
   };
 
-  form?.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", (event: SubmitEvent) => {
     event.preventDefault();
-    runDemo();
+    void runDemo();
   });
 </script>
