@@ -28,6 +28,10 @@ type AnalyzeResponse = {
   recommendation: Recommendation;
 };
 
+type RequestContext = {
+  request: Request;
+};
+
 const jsonHeaders = {
   "content-type": "application/json; charset=utf-8",
   "access-control-allow-origin": "*",
@@ -117,7 +121,7 @@ async function parseRequest(request: Request): Promise<{ intent: string; subject
   };
 }
 
-export const onRequest: PagesFunction = async ({ request }) => {
+export const onRequest = async ({ request }: RequestContext): Promise<Response> => {
   if (request.method === "OPTIONS") {
     return new Response(null, { headers: jsonHeaders });
   }
