@@ -1,7 +1,7 @@
 ---
 id: robinhood-mcp-readonly-source
 type: alternative
-status: proposed
+status: accepted
 question: adopt-robinhood-mcp
 ---
 

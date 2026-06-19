@@ -1,7 +1,7 @@
 ---
 id: robinhood-mcp-live-broker
 type: alternative
-status: proposed
+status: deferred
 question: adopt-robinhood-mcp
 ---
 

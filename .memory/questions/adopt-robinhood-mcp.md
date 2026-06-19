@@ -1,7 +1,8 @@
 ---
 id: adopt-robinhood-mcp
 type: question
-status: open
+status: resolved
+resolved_by: adopt-robinhood-mcp-readonly
 ---
 
 # Should AIfund Adopt Robinhood's Agentic Trading MCP?

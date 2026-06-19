@@ -12,20 +12,19 @@ This plan is a projection over AIfund project memory. It ports
 
 ## Active
 
-### Resolve the Robinhood MCP question
+### Build the Robinhood read-only data source
 
-- id: resolve-adopt-robinhood-mcp
-- status: active
-- why: Robinhood shipped an agentic trading MCP and the steward asked whether
-  AIfund can use it. The choice is open and affects broker and data strategy.
-- next action: Choose between the read-only and live-broker alternatives. The
-  read-only path is recommended first because it respects safety boundaries and
-  needs no account action.
+- id: build-robinhood-readonly-source
+- status: proposed
+- why: The Robinhood MCP question resolved to adopt a read-only data source; it
+  now needs an implementation.
+- next action: Add an optional Robinhood read-only data source in the
+  research/data layer, mapping quotes onto `QuoteSnapshot`, consumed via the MCP
+  client. Keep Yahoo/yfinance the default and place no order tools.
 - related memory:
-  - question: adopt-robinhood-mcp
-  - alternative: robinhood-mcp-readonly-source
-  - alternative: robinhood-mcp-live-broker
+  - decision: adopt-robinhood-mcp-readonly
   - constraint: execution-safety-boundaries
+  - decision: execution-outside-debate-graph
 
 ## Proposed
 
@@ -66,6 +65,17 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Resolve the Robinhood MCP question
+
+- id: resolve-adopt-robinhood-mcp
+- status: done
+- why: The choice of whether and how to use Robinhood's MCP was open and affected
+  broker and data strategy.
+- related memory:
+  - decision: adopt-robinhood-mcp-readonly
+  - episode: resolve-robinhood-mcp-question
+  - question: adopt-robinhood-mcp
 
 ### Bootstrap AIfund project memory
 
