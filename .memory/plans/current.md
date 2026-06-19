@@ -12,18 +12,17 @@ This plan is a projection over AIfund project memory. It ports
 
 ## Active
 
-### Build the Robinhood read-only data source
+### Wire Robinhood quotes into pre-trade context
 
-- id: build-robinhood-readonly-source
+- id: wire-robinhood-quotes
 - status: proposed
-- why: The Robinhood MCP question resolved to adopt a read-only data source; it
-  now needs an implementation.
-- next action: Add an optional Robinhood read-only data source in the
-  research/data layer, mapping quotes onto `QuoteSnapshot`, consumed via the MCP
-  client. Keep Yahoo/yfinance the default and place no order tools.
+- why: `RobinhoodQuoteSource` exists but nothing consumes it yet; the risk policy
+  already accepts a `QuoteSnapshot` for spread checks.
+- next action: Optionally feed `RobinhoodQuoteSource.get_quote` into the runner's
+  pre-trade quote, behind config, defaulting off. Add a real MCP caller only with
+  steward approval (account setup).
 - related memory:
   - decision: adopt-robinhood-mcp-readonly
-  - constraint: execution-safety-boundaries
   - decision: execution-outside-debate-graph
 
 ## Proposed
@@ -65,6 +64,16 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Build the Robinhood read-only data source
+
+- id: build-robinhood-readonly-source
+- status: done
+- why: The Robinhood MCP question resolved to a read-only data source, which
+  needed an implementation.
+- related memory:
+  - episode: build-robinhood-readonly-source
+  - decision: adopt-robinhood-mcp-readonly
 
 ### Resolve the Robinhood MCP question
 

@@ -10,43 +10,41 @@ updated: 2026-06-18
 
 ## Focus
 
-AIfund near-term work via `.memory/plans/current.md`. The Robinhood MCP question
-is resolved; next is implementing the read-only data source.
+Implement the Robinhood read-only data source, then wire it into pre-trade
+context.
 
 ## Progress
 
-- Bootstrapped AIfund's `.memory/` organizational memory; committed and pushed.
-- Investigated Robinhood's agentic-trading MCP.
-- Resolved `adopt-robinhood-mcp`: accepted the read-only data source, deferred the
-  live-broker path behind explicit approval.
+- Installed a local `uv` env (Python pinned to 3.12); `uv sync` and the harness
+  suite pass.
+- Resolved `adopt-robinhood-mcp` to read-only.
+- Built `RobinhoodQuoteSource` in `tradingagents/execution/market_data/`,
+  read-only by construction, mapping MCP quotes onto `QuoteSnapshot`, with a
+  harness. Suite green at 17 tests.
 
 ## Next Action
 
-Build the Robinhood read-only data source: an optional research/data-layer source
-that maps Robinhood MCP read tools onto `QuoteSnapshot`, consumed via the MCP
-client, with Yahoo/yfinance staying the default and no order tools wired.
+Wire `RobinhoodQuoteSource.get_quote` into the runner's pre-trade quote behind a
+config flag, defaulting off. A real MCP caller is added only with steward
+approval (account setup).
 
 ## Open Loops
 
-- Build Robinhood read-only source (active task) is design-ready; verifying it in
-  Python needs `uv`, not installed on this machine.
-- Capture first replay fixture (TA-002) is blocked: needs Thunder + Ollama and
-  `uv`.
+- Nothing consumes the quote source yet (active task `wire-robinhood-quotes`).
+- No real MCP caller is wired; the source is unconfigured by default and needs an
+  account + approval to connect live.
+- Capture first replay fixture (TA-002) still needs the Thunder + Ollama runtime.
 - Moomoo OpenAPI broker adapter (TA-008) is not built yet.
-- Cloudflare Pages web build (TA-010) is unblocked here: `npm` is available.
-- Live-broker path stays deferred behind explicit human approval and account
-  setup.
+- Cloudflare Pages web build (TA-010) is unblocked here.
 
 ## Working Context
 
-- `.memory/plans/current.md` — task-planning projection
-- `.memory/decisions/adopt-robinhood-mcp-readonly.md` — the resolution
-- `tradingagents/execution/schemas.py` — `QuoteSnapshot`
-- `docs/task-specs/backlog.md` — full backlog
-- Environment note: `uv` is not installed here, so the Python track cannot run.
+- `tradingagents/execution/market_data/robinhood.py`
+- `tradingagents/execution/risk_policy.py` (consumes `QuoteSnapshot`)
+- `tradingagents/execution/runner.py` (pre-trade flow)
+- run env: `uv run python scripts/run_harnesses.py`
 
 ## Promotion Notes
 
-This session's durable residue is written (decision, episode, transitions). When
-the read-only source is built, record its design as a Decision or system-spec and
-the work as an Episode with Transitions.
+This session's durable residue is written (episode, transition). When quotes are
+wired into the runner, record that as an Episode with Transitions.
