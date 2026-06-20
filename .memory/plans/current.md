@@ -12,6 +12,19 @@ This plan is a projection over AIfund project memory. It ports
 
 ## Active
 
+### Run the first Anthropic-backed research pass
+
+- id: run-anthropic-research-pass
+- status: blocked
+- why: The steward wants a real deep-research run on equities; the engine needs a
+  reachable model backend and Anthropic was chosen.
+- next action: Operator supplies `ANTHROPIC_API_KEY` in `.env.local`, then run
+  `uv run python -m cli.main exec paper <SYMBOL> <DATE>`. Blocked only on the key.
+- related memory:
+  - decision: anthropic-research-backend
+  - decision: thunder-ollama-serving
+  - goal: reliable-low-cost-paper-trading
+
 ### Wire Robinhood quotes into pre-trade context
 
 - id: wire-robinhood-quotes
