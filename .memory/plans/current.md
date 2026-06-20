@@ -12,17 +12,17 @@ This plan is a projection over AIfund project memory. It ports
 
 ## Active
 
-### Run the first Anthropic-backed research pass
+### Capture the NVDA run into replay fixtures
 
-- id: run-anthropic-research-pass
-- status: blocked
-- why: The steward wants a real deep-research run on equities; the engine needs a
-  reachable model backend and Anthropic was chosen.
-- next action: Operator supplies `ANTHROPIC_API_KEY` in `.env.local`, then run
-  `uv run python -m cli.main exec paper <SYMBOL> <DATE>`. Blocked only on the key.
+- id: capture-nvda-replay
+- status: proposed
+- why: The NVDA run produced a real full-states log; backlog TA-002 wants a real
+  replay fixture, and this unblocks it.
+- next action: Run
+  `uv run python scripts/capture_replay_case.py --source-log ~/.tradingagents/logs/NVDA/TradingAgentsStrategy_logs/full_states_log_2026-06-17.json`
+  then re-run the harness suite.
 - related memory:
-  - decision: anthropic-research-backend
-  - decision: thunder-ollama-serving
+  - episode: run-nvda-research-pass
   - goal: reliable-low-cost-paper-trading
 
 ### Wire the discovery shortlist into research (funnel stage two)
@@ -102,6 +102,16 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Run the first Anthropic-backed research pass
+
+- id: run-anthropic-research-pass
+- status: done
+- why: Proving a real deep-research run on a reachable backend was the milestone
+  for the near-term goal.
+- related memory:
+  - episode: run-nvda-research-pass
+  - decision: anthropic-research-backend
 
 ### Build the discovery screener
 

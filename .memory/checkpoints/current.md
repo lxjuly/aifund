@@ -3,49 +3,45 @@ id: aifund-current-checkpoint
 type: checkpoint
 status: handed-off
 actor: Claude
-updated: 2026-06-19
+updated: 2026-06-20
 ---
 
 # Current Checkpoint
 
 ## Focus
 
-Equity discovery ("what to buy") as a funnel: screen a universe to a shortlist,
-then deep-research the top names.
+End-to-end equity research: discovery screen, then deep multi-agent research on a
+top name, on the Anthropic backend.
 
 ## Progress
 
-- Built `tradingagents/discovery/`: a deterministic multi-factor screener
-  (momentum, value, quality) over a universe, with a runnable
-  `scripts/screen_candidates.py` and a harness. Suite green at 23 tests.
-- Ran a live screen over 30 names; top candidates included MA, CAT, AAPL, NVDA.
-- Earlier: read-only Robinhood quote source; Anthropic backend configured
-  (awaiting `ANTHROPIC_API_KEY`).
+- Built the discovery screener; live screen ranked a 30-name universe.
+- Configured the Anthropic backend; operator key in `.env.local`.
+- Ran the first real research pass: `exec paper NVDA 2026-06-17` returned BUY,
+  policy approved at 100 USD notional, dry run, full log saved. Suite green at 23
+  tests.
 
 ## Next Action
 
-Close the funnel: feed the screener's top-N shortlist into the research graph and
-rank the buy decisions. This is stage two and needs a model backend, so it waits
-on `ANTHROPIC_API_KEY` in `.env.local` (or Thunder + Ollama).
-
-Run discovery any time (no key needed):
-`uv run python scripts/screen_candidates.py --top 10 --out shortlist.json`
+Capture the NVDA run into replay fixtures (TA-002), now unblocked:
+`uv run python scripts/capture_replay_case.py --source-log ~/.tradingagents/logs/NVDA/TradingAgentsStrategy_logs/full_states_log_2026-06-17.json`
+then re-run `scripts/run_harnesses.py`.
 
 ## Open Loops
 
-- Funnel stage two (research the shortlist) needs a model backend.
-- Screener uses a curated 30-name universe and best-effort fundamentals; broaden
-  and harden later.
+- Funnel stage two is only manual so far (we picked a top name by hand); automate
+  screen -> research over a shortlist (`wire-discovery-into-research`).
 - Robinhood quote source built but not wired into the runner.
+- Rotate the Anthropic API key: it was pasted in chat.
 
 ## Working Context
 
-- `tradingagents/discovery/screener.py` — pure scoring
-- `tradingagents/discovery/yfinance_factors.py` — live data
-- `scripts/screen_candidates.py` — runnable screen
-- `.env.local` — Anthropic backend config (needs key)
+- run: `uv run python -m cli.main exec paper <SYMBOL> <DATE>`
+- discovery: `uv run python scripts/screen_candidates.py`
+- run log: `~/.tradingagents/logs/NVDA/TradingAgentsStrategy_logs/full_states_log_2026-06-17.json`
+- `.env.local` holds the Anthropic config and key (gitignored)
 
 ## Promotion Notes
 
-When the funnel is wired end-to-end, record it as an Episode with Transitions and
-capture a real research run log for the replay fixture (TA-002).
+The run's durable residue is recorded (episode, transition). After replay capture,
+record that work as an Episode with Transitions.
