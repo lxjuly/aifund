@@ -14,6 +14,7 @@ HARNESS_TESTS = [
     "tests.test_replay_harness",
     "tests.test_replay_capture_script",
     "tests.test_robinhood_quote_source",
+    "tests.test_screener",
 ]
 
 

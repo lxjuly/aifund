@@ -10,43 +10,42 @@ updated: 2026-06-19
 
 ## Focus
 
-Run a real deep-research pass on equities through the TradingAgents graph, using
-the Anthropic API as the model backend.
+Equity discovery ("what to buy") as a funnel: screen a universe to a shortlist,
+then deep-research the top names.
 
 ## Progress
 
-- Installed a local `uv` env; harness suite green at 17 tests.
-- Built the read-only `RobinhoodQuoteSource`.
-- Chose Anthropic as a hosted research backend and configured `.env.local`
-  (provider anthropic, deep `claude-sonnet-4-6`, quick `claude-haiku-4-5`,
-  backend URL blanked).
+- Built `tradingagents/discovery/`: a deterministic multi-factor screener
+  (momentum, value, quality) over a universe, with a runnable
+  `scripts/screen_candidates.py` and a harness. Suite green at 23 tests.
+- Ran a live screen over 30 names; top candidates included MA, CAT, AAPL, NVDA.
+- Earlier: read-only Robinhood quote source; Anthropic backend configured
+  (awaiting `ANTHROPIC_API_KEY`).
 
 ## Next Action
 
-Operator supplies `ANTHROPIC_API_KEY` in `.env.local` (billed to their account),
-then run:
+Close the funnel: feed the screener's top-N shortlist into the research graph and
+rank the buy decisions. This is stage two and needs a model backend, so it waits
+on `ANTHROPIC_API_KEY` in `.env.local` (or Thunder + Ollama).
 
-`uv run python -m cli.main exec paper <SYMBOL> <DATE>`
-
-This runs the full debate graph and the execution dry run. Pick a symbol and date
-(for example NVDA and a recent trading date).
+Run discovery any time (no key needed):
+`uv run python scripts/screen_candidates.py --top 10 --out shortlist.json`
 
 ## Open Loops
 
-- Blocked only on `ANTHROPIC_API_KEY`; everything else is wired.
-- Thunder + Ollama remains the low-cost default but is not reachable here.
-- Robinhood quote source is built but not yet wired into the runner.
-- Capture first replay fixture (TA-002) still needs a real run log; this Anthropic
-  run can produce one.
+- Funnel stage two (research the shortlist) needs a model backend.
+- Screener uses a curated 30-name universe and best-effort fundamentals; broaden
+  and harden later.
+- Robinhood quote source built but not wired into the runner.
 
 ## Working Context
 
-- `.env.local` (gitignored) — backend config
-- `tradingagents/graph/setup.py` — the debate graph
-- `tradingagents/llm_clients/anthropic_client.py` — Anthropic client
-- run: `uv run python -m cli.main exec paper <SYMBOL> <DATE>`
+- `tradingagents/discovery/screener.py` — pure scoring
+- `tradingagents/discovery/yfinance_factors.py` — live data
+- `scripts/screen_candidates.py` — runnable screen
+- `.env.local` — Anthropic backend config (needs key)
 
 ## Promotion Notes
 
-After the run, capture the result as an Episode with Transitions, and consider
-using the run log for the replay fixture (TA-002).
+When the funnel is wired end-to-end, record it as an Episode with Transitions and
+capture a real research run log for the replay fixture (TA-002).

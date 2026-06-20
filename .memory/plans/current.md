@@ -25,6 +25,31 @@ This plan is a projection over AIfund project memory. It ports
   - decision: thunder-ollama-serving
   - goal: reliable-low-cost-paper-trading
 
+### Wire the discovery shortlist into research (funnel stage two)
+
+- id: wire-discovery-into-research
+- status: proposed
+- why: The screener shortlists candidates but nothing yet feeds them into the
+  debate graph. Closing the funnel makes "what to buy" end-to-end.
+- next action: Take the top-N shortlist from `screen_candidates.py` and run the
+  research graph per name, then rank the resulting buy decisions. Needs a model
+  backend (Anthropic key or Thunder + Ollama).
+- related memory:
+  - goal: equity-discovery
+  - decision: discovery-funnel-multifactor-screener
+  - decision: anthropic-research-backend
+
+### Broaden and harden the screener
+
+- id: broaden-screener
+- status: proposed
+- why: The first screen uses a curated 30-name universe and best-effort
+  fundamentals.
+- next action: Support a larger universe (for example index membership), add
+  liquidity filters, and make value/quality fetch more robust.
+- related memory:
+  - decision: discovery-funnel-multifactor-screener
+
 ### Wire Robinhood quotes into pre-trade context
 
 - id: wire-robinhood-quotes
@@ -77,6 +102,17 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Build the discovery screener
+
+- id: build-discovery-screener
+- status: done
+- why: TradingAgents analyzes a given ticker but could not surface candidates;
+  the steward wanted to try the "what to buy" use case.
+- related memory:
+  - goal: equity-discovery
+  - decision: discovery-funnel-multifactor-screener
+  - episode: build-discovery-screener
 
 ### Build the Robinhood read-only data source
 
