@@ -30,6 +30,12 @@ append-only and reference the Episode that produced them. Cross-links use
 `[[id]]`. Current project state is derivable by replaying transitions; episodes
 group them into human-legible memory.
 
+When a Decision embeds a belief or a boundary, capture it alongside the Decision:
+record the belief as an Assumption and the boundary as a Constraint, and link them
+with `[[id]]`. This keeps the implicit drivers of the system explicit and
+challengeable, and avoids the assumption and constraint debt found in the
+backfill episode.
+
 Mirrors AIfund's steering docs (`AGENTS.md`, `WORKFLOW.md`,
 `docs/task-specs/backlog.md`) so humans and agents share one memory across
 sessions.

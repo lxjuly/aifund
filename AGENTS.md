@@ -32,6 +32,11 @@ Operate autonomously by default.
 - Prefer low-cost and reversible defaults for infrastructure.
 - Prefer Infrastructure as Code over one-off console setup when practical.
 - Document material design decisions in `docs/system-specs/` or `docs/task-specs/`.
+- Record organizational memory in `.memory/` using the Chronelle ontology
+  (goals, constraints, assumptions, questions, alternatives, decisions, episodes,
+  transitions). When a Decision embeds a belief or a boundary, capture it
+  alongside: the belief as an Assumption, the boundary as a Constraint, linked
+  with `[[id]]`. See `.memory/README.md`.
 
 ## Project Layout
 

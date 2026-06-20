@@ -31,8 +31,11 @@ work rested on unrecorded beliefs and boundaries.
   hosted-llm-sufficient, funnel-preserves-candidates
 - constraints: robinhood-read-only, decision-support-not-advice,
   hosted-llm-cost-control
+- a convention in `AGENTS.md` and `.memory/README.md` to capture assumptions and
+  constraints alongside decisions
 
 ## Transitions
 
 - backfill-research-assumptions
 - backfill-embedded-constraints
+- codify-assumption-constraint-convention
