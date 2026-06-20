@@ -25,6 +25,29 @@ This plan is a projection over AIfund project memory. It ports
   - episode: run-nvda-research-pass
   - goal: reliable-low-cost-paper-trading
 
+### Deep-research the sell candidates (sell-side funnel)
+
+- id: research-sell-candidates
+- status: proposed
+- why: The rating shortlists sells cheaply; the debate graph can confirm them, the
+  sell-side mirror of the discovery funnel.
+- next action: Feed `rate_holdings.py` sell/trim names into the research graph for
+  a final verdict. Needs a model backend.
+- related memory:
+  - goal: portfolio-sell-review
+  - decision: holdings-sell-rating
+
+### Add position context to the sell-rating
+
+- id: sell-rating-position-context
+- status: proposed
+- why: A real portfolio has weights and cost basis; "what to sell" is sharper with
+  position size and unrealized gain or loss.
+- next action: Accept optional per-holding weight and cost basis, and factor them
+  into the rating and output.
+- related memory:
+  - decision: holdings-sell-rating
+
 ### Wire the discovery shortlist into research (funnel stage two)
 
 - id: wire-discovery-into-research
@@ -102,6 +125,17 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Build the holdings sell-rating
+
+- id: build-holdings-sell-rating
+- status: done
+- why: The steward holds a portfolio and wanted to rate each stock to find what
+  to sell.
+- related memory:
+  - goal: portfolio-sell-review
+  - decision: holdings-sell-rating
+  - episode: build-holdings-sell-rating
 
 ### Run the first Anthropic-backed research pass
 

@@ -34,13 +34,31 @@ def _momentum_from_closes(closes, symbol: str, lookback_days: int) -> Optional[f
     return end / start - 1.0
 
 
+def _trend_from_closes(closes, symbol: str, window: int = 200) -> Optional[float]:
+    """Percent the latest close sits above (positive) or below (negative) its
+    moving average. A negative value means the stock is below its trend."""
+    try:
+        series = closes[symbol].dropna()
+    except Exception:
+        return None
+    if len(series) < window:
+        return None
+    moving_average = float(series.iloc[-window:].mean())
+    last = float(series.iloc[-1])
+    if moving_average <= 0:
+        return None
+    return last / moving_average - 1.0
+
+
 def fetch_factor_rows(
     tickers: Sequence[str],
     *,
     lookback_days: int = 126,
-    period: str = "9mo",
+    trend_window: int = 200,
+    period: str = "1y",
 ) -> list[dict]:
-    """Return factor rows: momentum (return), value (trailing P/E), quality (ROE)."""
+    """Return factor rows: momentum (return), value (P/E), quality (ROE), and
+    trend (percent above the 200-day moving average)."""
     import yfinance as yf
 
     data = yf.download(
@@ -56,6 +74,7 @@ def fetch_factor_rows(
     rows: list[dict] = []
     for symbol in tickers:
         momentum = _momentum_from_closes(closes, symbol, lookback_days)
+        trend = _trend_from_closes(closes, symbol, trend_window)
         value: Optional[float] = None
         quality: Optional[float] = None
         try:
@@ -65,6 +84,12 @@ def fetch_factor_rows(
         except Exception:
             pass
         rows.append(
-            {"symbol": symbol, "momentum": momentum, "value": value, "quality": quality}
+            {
+                "symbol": symbol,
+                "momentum": momentum,
+                "value": value,
+                "quality": quality,
+                "trend": trend,
+            }
         )
     return rows

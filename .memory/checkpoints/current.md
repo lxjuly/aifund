@@ -10,38 +10,41 @@ updated: 2026-06-20
 
 ## Focus
 
-End-to-end equity research: discovery screen, then deep multi-agent research on a
-top name, on the Anthropic backend.
+Portfolio decisions both ways: discover buys from a universe, and rate held
+stocks to find sells.
 
 ## Progress
 
-- Built the discovery screener; live screen ranked a 30-name universe.
-- Configured the Anthropic backend; operator key in `.env.local`.
-- Ran the first real research pass: `exec paper NVDA 2026-06-17` returned BUY,
-  policy approved at 100 USD notional, dry run, full log saved. Suite green at 23
-  tests.
+- Buy screen and a live research run on Anthropic (NVDA -> BUY).
+- Added the sell-side rating: `rate_holdings` combines relative weakness with
+  absolute concerns (negative momentum, below 200-day average, weak ROE) into
+  sell / trim / hold verdicts, with a runnable `scripts/rate_holdings.py`.
+- Suite green at 28 tests. Live run: DIS sell; PFE and INTC trim; rest hold.
 
 ## Next Action
 
-Capture the NVDA run into replay fixtures (TA-002), now unblocked:
-`uv run python scripts/capture_replay_case.py --source-log ~/.tradingagents/logs/NVDA/TradingAgentsStrategy_logs/full_states_log_2026-06-17.json`
-then re-run `scripts/run_harnesses.py`.
+Pick a thread:
+- capture the NVDA run into replay fixtures (TA-002), now unblocked;
+- deep-research the sell candidates (sell-side funnel, needs model backend);
+- add position weight and cost basis to the sell-rating.
+
+Run the sell-rating any time (no key):
+`uv run python scripts/rate_holdings.py --portfolio NVDA,AAPL,INTC,PFE,DIS`
 
 ## Open Loops
 
-- Funnel stage two is only manual so far (we picked a top name by hand); automate
-  screen -> research over a shortlist (`wire-discovery-into-research`).
+- Both funnels (buy and sell) are only manual into research so far; automate.
 - Robinhood quote source built but not wired into the runner.
 - Rotate the Anthropic API key: it was pasted in chat.
 
 ## Working Context
 
-- run: `uv run python -m cli.main exec paper <SYMBOL> <DATE>`
-- discovery: `uv run python scripts/screen_candidates.py`
-- run log: `~/.tradingagents/logs/NVDA/TradingAgentsStrategy_logs/full_states_log_2026-06-17.json`
-- `.env.local` holds the Anthropic config and key (gitignored)
+- buy: `tradingagents/discovery/screener.py`, `scripts/screen_candidates.py`
+- sell: `tradingagents/discovery/rating.py`, `scripts/rate_holdings.py`
+- shared data: `tradingagents/discovery/yfinance_factors.py`
+- research: `uv run python -m cli.main exec paper <SYMBOL> <DATE>`
 
 ## Promotion Notes
 
-The run's durable residue is recorded (episode, transition). After replay capture,
-record that work as an Episode with Transitions.
+Durable residue for this session is recorded (goal, decision, episode,
+transitions). Record future funnel automation as Episodes with Transitions.
