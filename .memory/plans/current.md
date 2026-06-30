@@ -37,17 +37,6 @@ This plan is a projection over AIfund project memory. It ports
   - goal: portfolio-sell-review
   - decision: holdings-sell-rating
 
-### Add position context to the sell-rating
-
-- id: sell-rating-position-context
-- status: proposed
-- why: A real portfolio has weights and cost basis; "what to sell" is sharper with
-  position size and unrealized gain or loss.
-- next action: Accept optional per-holding weight and cost basis, and factor them
-  into the rating and output.
-- related memory:
-  - decision: holdings-sell-rating
-
 ### Wire the discovery shortlist into research (funnel stage two)
 
 - id: wire-discovery-into-research
@@ -125,6 +114,18 @@ This plan is a projection over AIfund project memory. It ports
   - decision: cloudflare-pages-public-site
 
 ## Done
+
+### Add position context to the sell-rating
+
+- id: sell-rating-position-context
+- status: done
+- why: A real portfolio has weights and cost basis; "what to sell" is sharper with
+  position size and unrealized gain or loss.
+- related memory:
+  - decision: holdings-sell-rating
+  - decision: incorporate-optional-position-context-into-holdings-sell-rating
+  - episode: add-position-context-to-sell-rating
+  - experiment: chronelle-local-agent-e2e-dogfood-on-aifund-position-context-task
 
 ### Build the holdings sell-rating
 

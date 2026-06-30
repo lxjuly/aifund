@@ -54,6 +54,27 @@ class RatingTests(unittest.TestCase):
         # AAA: negative momentum + below trend = two concerns -> sell.
         self.assertEqual(ratings["AAA"].verdict, "sell")
 
+    def test_position_context_can_add_concerns(self):
+        rows = [
+            {"symbol": "CONC", "momentum": 0.05, "value": 20.0, "quality": 0.15, "trend": 0.04},
+            {"symbol": "OK", "momentum": 0.07, "value": 18.0, "quality": 0.20, "trend": 0.05},
+        ]
+
+        ratings = {
+            r.symbol: r
+            for r in rate_holdings(
+                rows,
+                positions={
+                    "CONC": {"weight": 0.22, "cost_basis": 100.0, "market_price": 80.0},
+                },
+            )
+        }
+
+        self.assertEqual(ratings["CONC"].verdict, "sell")
+        self.assertIn("large position weight", ratings["CONC"].concerns)
+        self.assertIn("unrealized loss exceeds threshold", ratings["CONC"].concerns)
+        self.assertAlmostEqual(ratings["CONC"].position["unrealized_return"], -0.2)
+
 
 if __name__ == "__main__":
     unittest.main()
